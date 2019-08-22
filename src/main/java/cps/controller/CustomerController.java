@@ -3,10 +3,12 @@ package cps.controller;
 
 import cps.entity.Customers;
 import cps.exception.CustomerNotFoundException;
-import cps.repository.CustomersRepository;
+import cps.services.CustomersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -14,47 +16,49 @@ import java.util.List;
 @RestController
 public class CustomerController {
 
+
+    private final CustomersService customersService;
+
     @Autowired
-    CustomersRepository customersRepository;
+    public CustomerController(CustomersService customersService){
+        this.customersService = customersService;
+    }
+
 
     @GetMapping("/customers")
-    public List getAllCustomers(){
-        return customersRepository.findAll();
+    public ResponseEntity<List<Customers>> getAllCustomers(){
+        return ResponseEntity.ok(customersService.getALL());
     }
 
     @PostMapping("/customers")
-    public Customers createCustomer(@Valid @RequestBody Customers customer){
-        return customersRepository.save(customer);
+    public ResponseEntity<Customers> createCustomer(@Valid @RequestBody Customers customer){
+        return ResponseEntity.status(HttpStatus.CREATED).body(customersService.createCustomers(customer));
     }
 
     @DeleteMapping("/customers/{id}")
-    public ResponseEntity deleteCustomer(@PathVariable(value = "id") Long id) throws CustomerNotFoundException{
-
-        Customers customer = customersRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(id));
-        customersRepository.delete(customer);
-        return ResponseEntity.ok().build();
+    public  ResponseEntity<String> deleteCustomer(@PathVariable(value = "id") Long id) {
+        customersService.deleteCustomers(id);
+        return ResponseEntity.ok("Customer with id = "+id+" has deleted successful");
     }
 
     @GetMapping("/customers/{id}")
-    public Customers getCustomerById(@PathVariable(value = "id") Long id) throws CustomerNotFoundException{
-        return customersRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(id));
+    public ResponseEntity<Customers> getCustomerById(@PathVariable(value = "id") Long id){
+        try{
+            return ResponseEntity.ok(customersService.getById(id));
+        }
+        catch (CustomerNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,null,e);
+        }
     }
 
     @PutMapping("/customers/{id}")
-    public Customers editCustomer(@Valid @RequestBody Customers customersDetails,
-                                  @PathVariable(value = "id") Long id) throws CustomerNotFoundException{
-
-        Customers customer = customersRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(id));
-
-        customer.setTitle(customersDetails.getTitle());
-        customer.setIs_deleted(customersDetails.getIs_deleted());
-        customer.setCreated_at(customersDetails.getCreated_at());
-        customer.setModified_at(customersDetails.getModified_at());
-
-        Customers updatedCustomer = customersRepository.save(customer);
-        return updatedCustomer;
+    public ResponseEntity<Customers> editCustomer(@Valid @RequestBody Customers customersDetails,
+                                  @PathVariable(value = "id") Long id) {
+        try{
+            return ResponseEntity.ok(customersService.editCustomers(id,customersDetails));
+        }
+        catch (CustomerNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,null,e);
+        }
     }
 }

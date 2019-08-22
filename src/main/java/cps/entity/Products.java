@@ -48,7 +48,7 @@ public class Products {
         this.created_at = created_at;
     }
 
-    public void setModefied_at(Timestamp modified_at) {
+    public void setModified_at(Timestamp modified_at) {
         this.modified_at = modified_at;
     }
 
@@ -78,7 +78,7 @@ public class Products {
         return created_at;
     }
 
-    public Timestamp getModefied_at() {
+    public Timestamp getModified_at() {
         return modified_at;
     }
 

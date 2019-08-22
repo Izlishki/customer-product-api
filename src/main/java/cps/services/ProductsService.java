@@ -2,6 +2,8 @@ package cps.services;
 
 import cps.entity.Customers;
 import cps.entity.Products;
+import cps.exception.CustomerNotFoundException;
+import cps.exception.ProductNotFoundException;
 import cps.repository.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,33 +15,50 @@ import java.util.List;
 @Service
 public class ProductsService {
 
-    @Autowired
+
     private final ProductsRepository productsRepository;
     private final CustomersService customersService;
 
+    @Autowired
     public ProductsService(ProductsRepository productsRepository, CustomersService customersService){
         this.productsRepository = productsRepository;
         this.customersService = customersService;
 
     }
+
     @Transactional
-    public void createProducts(Products products, Long customer_id){
+    public Products createProducts( Long customer_id, Products product) throws CustomerNotFoundException {
         Customers customer = customersService.getById(customer_id);
-        products.setCustomer_id(customer);
-        productsRepository.save(products);
+        product.setCustomer_id(customer);
+        product.setCreated_at(new Timestamp(System.currentTimeMillis()));
+        product.setModified_at(new Timestamp(System.currentTimeMillis()));
+        Products newProduct = productsRepository.save(product);
+        return newProduct;
     }
 
-    public List<Products> getALL(){
-        return productsRepository.findAll();
+    public List<Products> getByCustomerId(Long id) throws ProductNotFoundException {
+        return productsRepository.findByCustomerId(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
-    public Products getById(Long id){
-        return productsRepository.findById(id).orElse(null);
+    public Products getById(Long id) throws ProductNotFoundException{
+        return productsRepository.findById(id)
+                .orElseThrow(()-> new ProductNotFoundException(id));
     }
 
-    public void deleteProducts(Long id){productsRepository.deleteById(id);}
+    public void deleteProducts(Long id){
+        productsRepository.deleteById(id);
+    }
 
-    public void editProducts(Customers customer, String title, String description, double price, boolean is_deleted, Timestamp created_at, Timestamp modified_at, Long id){
-        productsRepository.editProducts(customer, title, description, price, is_deleted,created_at,modified_at,id);
+    @Transactional
+    public Products editProducts(Long id, Products product) throws ProductNotFoundException{
+        Products oldProduct = productsRepository.findById(id)
+                .orElseThrow(()-> new ProductNotFoundException(id));
+        product.setId(oldProduct.getId());
+        product.setCreated_at(oldProduct.getCreated_at());
+        product.setModified_at(new Timestamp(System.currentTimeMillis()));
+        product.setCustomer_id(oldProduct.getCustomer_id());
+        Products newProduct = productsRepository.save(product);
+        return newProduct;
     }
 }
