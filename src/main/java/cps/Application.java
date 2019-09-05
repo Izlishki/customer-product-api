@@ -25,26 +25,5 @@ public class Application {
 
     }
 
-//    @EventListener(ApplicationReadyEvent.class)
-//    private void testJpaMethods(){
-//        Timestamp now = new Timestamp(System.currentTimeMillis());
-////        Customers customers = new Customers();
-////        customers.setTitle("Ваня");
-////        customers.setIs_deleted(false);
-////        customers.setCreated_at(now);
-////        customers.setModified_at(now);
-////        customersService.createCustomers(customers);
-////        Products products = new Products();
-////        products.setTitle("Семки");
-////        products.setDescription("Семки как семки, хули тут объяснять");
-////        products.setIs_deleted(false);
-////        products.setPrice(1488);
-////        products.setCreated_at(now);
-////        products.setModefied_at(now);
-////        productsService.createProducts(products,2l);
-//        productsService.getALL().forEach(it-> System.out.println(it.toString()));
-//        customersService.getALL().forEach(it -> System.out.println(it.toString()));
-//
-//    }
 
 }
