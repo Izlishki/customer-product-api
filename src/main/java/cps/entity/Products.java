@@ -16,15 +16,15 @@ public class Products {
     private String title;
     private String description;
     private double price;
-    private boolean is_deleted;
-    private Timestamp created_at;
-    private Timestamp modified_at;
+    private boolean isDeleted;
+    private Timestamp createdAt;
+    private Timestamp modifiedAt;
 
 
 
     public void setId(Long id) { this.id = id; }
 
-    public void setCustomer_id(Customers customer) {
+    public void setCustomerId(Customers customer) {
         this.customer = customer;
     }
 
@@ -40,23 +40,21 @@ public class Products {
         this.price = price;
     }
 
-    public void setIs_deleted(boolean is_deleted) {
-        this.is_deleted = is_deleted;
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
-    public void setCreated_at(Timestamp created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public void setModified_at(Timestamp modified_at) {
-        this.modified_at = modified_at;
-    }
+    public void setModifiedAt(Timestamp modifiedAt) { this.modifiedAt = modifiedAt; }
 
     public Long getId() {
         return id;
     }
 
-    public Customers getCustomer_id() {
+    public Customers getCustomerId() {
         return customer;
     }
 
@@ -72,14 +70,14 @@ public class Products {
         return price;
     }
 
-    public boolean getIs_deleted(){return is_deleted;}
+    public boolean getIsDeleted(){return isDeleted;}
 
-    public Timestamp getCreated_at() {
-        return created_at;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public Timestamp getModified_at() {
-        return modified_at;
+    public Timestamp getModifiedAt() {
+        return modifiedAt;
     }
 
     @Override
@@ -90,9 +88,9 @@ public class Products {
                 ", title = '" + title + '\'' +
                 ", description = '" + description + '\'' +
                 ", price = '" + price + '\'' +
-                ", is_deleted = '" + is_deleted + '\'' +
-                ", create_at = " + created_at +'\''+
-                ",modified_at = "+modified_at+
+                ", is_deleted = '" + isDeleted + '\'' +
+                ", create_at = " + createdAt +'\''+
+                ",modified_at = "+modifiedAt+
                 '}';
     }
 }

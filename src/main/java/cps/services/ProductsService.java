@@ -29,9 +29,9 @@ public class ProductsService {
     @Transactional
     public Products createProducts( Long customer_id, Products product) throws CustomerNotFoundException {
         Customers customer = customersService.getById(customer_id);
-        product.setCustomer_id(customer);
-        product.setCreated_at(new Timestamp(System.currentTimeMillis()));
-        product.setModified_at(new Timestamp(System.currentTimeMillis()));
+        product.setCustomerId(customer);
+        product.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        product.setModifiedAt(new Timestamp(System.currentTimeMillis()));
         Products newProduct = productsRepository.save(product);
         return newProduct;
     }
@@ -55,9 +55,9 @@ public class ProductsService {
         Products oldProduct = productsRepository.findById(id)
                 .orElseThrow(()-> new ProductNotFoundException(id));
         product.setId(oldProduct.getId());
-        product.setCreated_at(oldProduct.getCreated_at());
-        product.setModified_at(new Timestamp(System.currentTimeMillis()));
-        product.setCustomer_id(oldProduct.getCustomer_id());
+        product.setCreatedAt(oldProduct.getCreatedAt());
+        product.setModifiedAt(new Timestamp(System.currentTimeMillis()));
+        product.setCustomerId(oldProduct.getCustomerId());
         Products newProduct = productsRepository.save(product);
         return newProduct;
     }

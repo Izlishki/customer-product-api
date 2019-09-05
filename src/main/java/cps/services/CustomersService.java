@@ -23,8 +23,8 @@ public class CustomersService {
 
     public Customers createCustomers(Customers customer){
 
-        customer.setCreated_at(new Timestamp(System.currentTimeMillis()));
-        customer.setModified_at(new Timestamp(System.currentTimeMillis()));
+        customer.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        customer.setModifiedAt(new Timestamp(System.currentTimeMillis()));
         Customers newCustomer = customersRepository.save(customer);
         return newCustomer;
     }
@@ -46,9 +46,9 @@ public class CustomersService {
     public Customers editCustomers(Long id, Customers customer) throws CustomerNotFoundException{
         Customers oldCustomer = customersRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException(id));
-        customer.setModified_at(oldCustomer.getCreated_at());
+        customer.setModifiedAt(oldCustomer.getCreatedAt());
         customer.setId(id);
-        customer.setModified_at(new Timestamp(System.currentTimeMillis()));
+        customer.setModifiedAt(new Timestamp(System.currentTimeMillis()));
         Customers newCustomer = customersRepository.save(customer);
         return newCustomer;
     }
